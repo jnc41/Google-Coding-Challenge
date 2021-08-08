@@ -33,3 +33,10 @@ class Video:
     # created so can sort videos in alphabetical order
     def __lt__(self, other):
         return self._title < other.title
+
+    def __repr__(self):
+        # tags = ""
+        # for tag in video.tags:
+        #     tags += f"{tag} "
+        tags = (" ".join([tag for tag in self.tags]))
+        return f"{self.title} ({self.video_id}) [{tags}]"
