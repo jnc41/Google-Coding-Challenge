@@ -29,3 +29,7 @@ class Video:
     def tags(self) -> Sequence[str]:
         """Returns the list of tags of a video."""
         return self._tags
+
+    # created so can sort videos in alphabetical order
+    def __lt__(self, other):
+        return self._title < other.title

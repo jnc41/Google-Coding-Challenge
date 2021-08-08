@@ -1,6 +1,9 @@
 """A video player class."""
 
 from .video_library import VideoLibrary
+import random
+
+
 
 
 class VideoPlayer:
@@ -8,6 +11,8 @@ class VideoPlayer:
 
     def __init__(self):
         self._video_library = VideoLibrary()
+        self.current_playing = None
+        self.paused = False
 
     def number_of_videos(self):
         num_videos = len(self._video_library.get_all_videos())
@@ -15,8 +20,16 @@ class VideoPlayer:
 
     def show_all_videos(self):
         """Returns all videos."""
+        print("Here's a list of all available videos:")
+        list_videos = self._video_library.get_all_videos()
+        list_videos.sort()  # uses new Video class method
 
-        print("show_all_videos needs implementation")
+        for video in list_videos:
+            # tags = ""
+            # for tag in video.tags:
+            #     tags += f"{tag} "
+            tags = (" ".join([tag for tag in video.tags]))
+            print(f"{video.title} ({video.video_id}) [{tags}]")
 
     def play_video(self, video_id):
         """Plays the respective video.
@@ -24,32 +37,91 @@ class VideoPlayer:
         Args:
             video_id: The video_id to be played.
         """
-        print("play_video needs implementation")
+
+        video = self._video_library.get_video(video_id)
+
+        if self.current_playing == None and video != None:
+            print(f"Playing video: {video.title}")
+            self.current_playing = video
+
+        elif self.current_playing != None and video != None:
+            print(f"Stopping video: {self.current_playing.title}")
+            print(f"Playing video: {video.title}")
+            self.current_playing = video
+
+        elif video == None:
+            print("Cannot play video: Video does not exist")
+
+        self.paused = False
 
     def stop_video(self):
         """Stops the current video."""
 
-        print("stop_video needs implementation")
+        if self.current_playing != None:
+            print(f"Stopping video: {self.current_playing.title}")
+            self.current_playing = None
+        else:
+            print("Cannot stop video: No video is currently playing")
 
     def play_random_video(self):
         """Plays a random video from the video library."""
 
-        print("play_random_video needs implementation")
+        list_videos = self._video_library.get_all_videos()
+        random_vid = list_videos[random.randint(0, len(list_videos) - 1)]
+
+        if self.current_playing == None and random_vid != None:
+            print(f"Playing video: {random_vid.title}")
+            self.current_playing = random_vid
+
+        elif self.current_playing != None and random_vid != None:
+            print(f"Stopping video: {self.current_playing.title}")
+            print(f"Playing video: {random_vid.title}")
+            self.current_playing = random_vid
+
+        elif random_vid == None:
+            print("No videos available")
+
+        self.paused = False
 
     def pause_video(self):
         """Pauses the current video."""
 
-        print("pause_video needs implementation")
+        if not self.paused and self.current_playing != None:
+            print(f"Pausing video: {self.current_playing.title}")
+            self.paused = True
+
+        elif self.paused == True and self.current_playing != None:
+            print(f"Video already paused: {self.current_playing.title}")
+
+        elif self.current_playing == None:
+            print("Cannot pause video: No video is currently playing")
 
     def continue_video(self):
         """Resumes playing the current video."""
 
-        print("continue_video needs implementation")
+        if self.paused and self.current_playing != None:
+            print(f"Continuing video: {self.current_playing.title}")
+            self.paused = False
+
+        elif not self.paused and self.current_playing != None:
+            print("Cannot continue video: Video is not paused")
+
+        elif self.current_playing == None:
+            print("Cannot continue video: No video is currently playing")
 
     def show_playing(self):
         """Displays video currently playing."""
 
-        print("show_playing needs implementation")
+        if self.current_playing != None and not self.paused:
+            tags = (" ".join([tag for tag in self.current_playing.tags]))
+            print(f"Currently playing: {self.current_playing.title} ({self.current_playing.video_id}) [{tags}]")
+
+        elif self.current_playing != None and self.paused:
+            tags = (" ".join([tag for tag in self.current_playing.tags]))
+            print(f"Currently playing: {self.current_playing.title} ({self.current_playing.video_id}) [{tags}] - PAUSED")
+
+        elif self.current_playing == None:
+            print("No video is currently playing")
 
     def create_playlist(self, playlist_name):
         """Creates a playlist with a given name.
