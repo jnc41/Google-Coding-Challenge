@@ -69,14 +69,10 @@ class VideoPlayer:
         """Plays a random video from the video library."""
 
         list_videos = self._video_library.get_all_videos()
-        videos = []
+        list_videos = [video for video in list_videos if not video.flagged]
 
-        for video in list_videos:
-            if not video.flagged:
-                videos.append(video)
-
-        if len(videos) != 0:
-            random_vid = list_videos[random.randint(0, len(videos) - 1)]
+        if len(list_videos) != 0:
+            random_vid = list_videos[random.randint(0, len(list_videos) - 1)]
             if random_vid != None:
                 self.play_video(random_vid._video_id)
 
