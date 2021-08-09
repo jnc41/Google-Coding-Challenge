@@ -15,6 +15,9 @@ class Video:
         # in case the caller changes the 'video_tags' they passed to us
         self._tags = tuple(video_tags)
 
+        self.flagged = False
+        self.flag_reason = "Not supplied"
+
     @property
     def title(self) -> str:
         """Returns the title of a video."""
@@ -39,4 +42,6 @@ class Video:
         # for tag in video.tags:
         #     tags += f"{tag} "
         tags = (" ".join([tag for tag in self.tags]))
+        if self.flagged:
+            return f"{self.title} ({self.video_id}) [{tags}] - FLAGGED (reason: {self.flag_reason})"
         return f"{self.title} ({self.video_id}) [{tags}]"
